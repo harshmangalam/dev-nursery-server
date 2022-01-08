@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+
+const { createAdmin } = require("./seeds/user.seed");
 require("dotenv").config();
 
 const app = express();
@@ -10,6 +12,7 @@ const http = require("http").createServer(app);
 
 // routes
 const authRoutes = require("./routes/auth.route");
+const collectionRoutes = require("./routes/collection.route");
 
 // middlewares
 
@@ -42,6 +45,7 @@ app.get("/", (req, res) => {
 
 // routes middleware
 app.use("/api/auth", authRoutes);
+app.use("/api/collections", collectionRoutes);
 
 // page not found error handling  middleware
 
@@ -69,9 +73,8 @@ app.use((err, req, res, next) => {
 async function main() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-
     console.log("database connected");
-
+    await createAdmin();
     http.listen(process.env.PORT, () =>
       console.log(`Server listening on port ${process.env.PORT}`)
     );

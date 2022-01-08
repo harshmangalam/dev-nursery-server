@@ -23,7 +23,7 @@ exports.login = async (req, res, next) => {
       return next({ status: 400, message: "Incorrect email address" });
     }
     // verify password
-    const matchPassword = await checkPassword(password, user.password, next);
+    const matchPassword = await checkPassword(password, user.password);
     if (!matchPassword) {
       return next({ status: 400, message: "Incorrect password" });
     }
@@ -75,7 +75,7 @@ exports.signup = async (req, res, next) => {
 
     // hash password
 
-    let hashedPass = await hashPassword(password, next);
+    let hashedPass = await hashPassword(password);
 
     // create new user
 
