@@ -7,6 +7,7 @@ const collectionSchema = new Schema(
       required: [true, "Collection name must not be empty"],
       maxlength: [30, "Collection name must be less than 30 character"],
       trim: true,
+      unique: true,
     },
     image: {
       type: String,
@@ -16,6 +17,7 @@ const collectionSchema = new Schema(
       type: String,
       required: [true, "Collection slug must not be empty"],
       trim: true,
+      unique: true,
     },
     description: {
       type: String,
