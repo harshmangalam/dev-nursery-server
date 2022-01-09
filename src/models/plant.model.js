@@ -10,15 +10,7 @@ const plantSchema = new Schema(
       unique: true,
     },
     images: [String],
-    totalReviews: {
-      type: Number,
-      min: 0,
-    },
-    avgRating: {
-      type: Number,
-      min: 0,
-      max: 5,
-    },
+
     price: {
       type: Number,
       min: 0,

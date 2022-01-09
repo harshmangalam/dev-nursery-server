@@ -11,6 +11,9 @@ const {
   updatePlant,
   deletePlant,
   fetchPlant,
+  fetchPlantReviews,
+  createPlantReview,
+  deletePlantReview,
 } = require("../controllers/plant.controller");
 
 const plantValidation = [
@@ -21,16 +24,30 @@ const plantValidation = [
     .isEmpty()
     .withMessage("Plant collection must be required"),
 ];
+
+const plantReviewValidation = [
+  body("ratings")
+    .not()
+    .isEmpty()
+    .withMessage("Review ratings  must be required"),
+  body("content")
+    .not()
+    .isEmpty()
+    .withMessage("Review content  must be required"),
+];
 router.get("/", fetchPlants);
 router.get("/:plantId", fetchPlant);
 router.post("/", checkAuth, checkAdmin, plantValidation, createPlant);
-router.put(
-  "/:plantId",
-  checkAuth,
-  checkAdmin,
-  plantValidation,
-  updatePlant
-);
+router.put("/:plantId", checkAuth, checkAdmin, plantValidation, updatePlant);
 router.delete("/:plantId", checkAuth, checkAdmin, deletePlant);
 
+// plant reviews routes
+router.get("/:plantId/reviews", fetchPlantReviews);
+router.post(
+  "/:plantId/reviews",
+  checkAuth,
+  plantReviewValidation,
+  createPlantReview
+);
+router.delete("/:plantId/reviews/:reviewId", checkAuth, deletePlantReview);
 module.exports = router;
