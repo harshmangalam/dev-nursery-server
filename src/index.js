@@ -15,6 +15,7 @@ const authRoutes = require("./routes/auth.route");
 const collectionRoutes = require("./routes/collection.route");
 const plantRoutes = require("./routes/plant.route");
 const cartRoutes = require("./routes/cart.route");
+const orderRoutes = require("./routes/order.route");
 
 // middlewares
 
@@ -50,6 +51,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/collections", collectionRoutes);
 app.use("/api/plants", plantRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 // page not found error handling  middleware
 
