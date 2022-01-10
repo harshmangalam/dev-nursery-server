@@ -14,7 +14,10 @@ const orderValidation = [
     .not()
     .isEmpty()
     .withMessage("Order items must be required with quantity and plant id"),
-  body("payment").not().isEmpty().withMessage("Order payment must be required"),
+  body("shippingAddress").not().isEmpty().withMessage("SHipping Address must be required"),
+  body("paymentMethod").not().isEmpty().withMessage("Payment Type must be required"),
+  body("plantsPrice").not().isEmpty().withMessage("Plants Price must be required"),
+  body("paymentDone").not().isEmpty().withMessage("Payment Done must be required"),
 ];
 
 router.get("/", fetchOrders);

@@ -58,12 +58,22 @@ exports.placeOrder = async (req, res, next) => {
   }
 
   const userId = res.locals.user._id;
-  const { items, payment } = req.body;
+  const { items, paymentMethod, shippingAddress, plantsPrice, paymentDone } =
+    req.body;
   try {
+    const shippingPrice = plantsPrice >= 300 ? 0 : 20;
+    const taxPrice = 10;
+    const totalPrice = plantsPrice + shippingPrice + taxPrice;
     const newOrder = new Order({
       user: userId,
       items,
-      payment,
+      paymentMethod,
+      shippingAddress,
+      paymentDone,
+      plantsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
     });
 
     const order = await newOrder.save();
@@ -89,14 +99,35 @@ exports.updateOrder = async (req, res, next) => {
       data: errors.mapped(),
     });
   }
-  const { status } = req.body;
+  const { status, paymentDone } = req.body;
 
   try {
     let order = await Order.findById(req.params.orderId);
     if (!order) {
       return next({ status: 404, message: "Order does not exists" });
     }
+
+    switch (status) {
+      case "PROCESSING":
+        order.processingAt = new Date();
+        break;
+
+      case "OUT_FOR_DELIVERY":
+        order.outForDeliveryAt = new Date();
+        break;
+
+      case "DELIVERED":
+        order.deliveredAt = new Date();
+        break;
+
+      case "CANCEL":
+        order.cancelAt = new Date();
+        break;
+      default:
+        throw new Error("Order status is invalid");
+    }
     order.status = status;
+    order.paymentDone = paymentDone;
     order = await order.save();
 
     order = await order.populate([{ path: "user" }, { path: "items.plant" }]);
