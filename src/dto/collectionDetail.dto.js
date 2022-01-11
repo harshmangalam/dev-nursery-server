@@ -6,5 +6,8 @@ module.exports = (collection) => {
     slug: collection.slug,
     createdAt: collection.createdAt,
     updatedAt: collection.updatedAt,
+    description: collection.description,
+    plants: collection.plants,
+    countPlants: collection.countPlants,
   };
 };
