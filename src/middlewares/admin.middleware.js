@@ -1,3 +1,5 @@
+// check admin roles
+
 module.exports = (req, res, next) => {
   const currentUser = res.locals.user;
 

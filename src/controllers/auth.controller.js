@@ -30,6 +30,7 @@ exports.login = async (req, res, next) => {
 
     const token = createJwtToken({ userId: user._id });
 
+    // set token to user frontend cookies 
     res.set(
       "Set-Cookie",
       cookie.serialize("token", token, {
@@ -122,6 +123,7 @@ exports.fetchCurrentUser = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
+    // expire cookies from user frontend 
     res.set(
       "Set-Cookie",
       cookie.serialize("token", "", {

@@ -1,13 +1,17 @@
 const Plant = require("../models/plant.model");
 const Review = require("../models/review.model");
 const plantDTO = require("../dto/plant.dto");
+const plantDetailDTO = require("../dto/plantDetails.dto");
 const reviewDTO = require("../dto/review.dto");
 const slugify = require("../utils/slug.util");
 const { validationResult } = require("express-validator");
 
 exports.fetchPlant = async (req, res, next) => {
   try {
-    const plant = await Plant.findById(req.params.plantId);
+    const plant = await Plant.findById(req.params.plantId).populate({
+      path: "plantCollection",
+      select: "name image slug description",
+    });
 
     if (!plant) {
       return next({
@@ -16,19 +20,17 @@ exports.fetchPlant = async (req, res, next) => {
         data: null,
       });
     }
-
     const reviews = await Review.find({ plant: req.params.plantId }).select(
       "ratings"
     );
     const totalRatings = reviews.reduce((a, review) => a + review.ratings, 0.0);
-
     const avgRatings = totalRatings / reviews.length;
 
     return res.status(200).json({
       type: "success",
-      message: "Fetch plant by id",
+      message: "Fetch plant Details",
       data: {
-        plant: plantDTO({ ...plant }),
+        plant: plantDetailDTO(plant),
         reviews: {
           countAvgRatings: avgRatings,
           countReviews: reviews.length,
@@ -51,7 +53,7 @@ exports.fetchPlants = async (req, res, next) => {
     });
     return res.status(200).json({
       type: "success",
-      message: "Fetch plants",
+      message: "Fetch plant lists",
       data: {
         plants: plantsData,
       },
@@ -72,7 +74,7 @@ exports.createPlant = async (req, res, next) => {
   const { name, description, images, price, specification, collection } =
     req.body;
   try {
-    const plant = await Plant.findOne({ name });
+    const plant = await Plant.findOne({ name }).select("name");
     if (plant) {
       return next({ status: 400, message: "Plant  already exists" });
     }
@@ -89,13 +91,12 @@ exports.createPlant = async (req, res, next) => {
       plantCollection: collection,
     });
 
-    const savePlant = await newPlant.save();
-
+    let savePlant = await newPlant.save();
     return res.status(201).json({
       type: "success",
       message: "Plant created successfully",
       data: {
-        plant: plantDTO(savePlant),
+        plantId: savePlant._id,
       },
     });
   } catch (error) {
@@ -139,19 +140,21 @@ exports.updatePlant = async (req, res, next) => {
       },
     });
   } catch (error) {
+    // handle plant already found
+    if (error.code === 11000) {
+      return next({ status: 400, message: "Plant alredy exists" });
+    }
     next(error);
   }
 };
 
 exports.deletePlant = async (req, res, next) => {
   try {
-    const plant = await Plant.findById(req.params.plantId);
+    const plant = await Plant.findById(req.params.plantId).select("_id");
     if (!plant) {
       return next({ status: 404, message: "Plant does  not exists" });
     }
-
     await plant.remove();
-
     return res.status(201).json({
       type: "success",
       message: "Plant removed successfully",
@@ -246,7 +249,6 @@ exports.createPlantReview = async (req, res, next) => {
     next(error);
   }
 };
-
 
 exports.deletePlantReview = async (req, res, next) => {
   try {

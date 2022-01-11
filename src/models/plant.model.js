@@ -37,12 +37,12 @@ const plantSchema = new Schema(
       },
       color: {
         type: String,
-        default: "any color",
         trim: true,
       },
       difficulty: {
         type: String,
-        default: "easy to grow",
+        enum: ["EASY_TO_GROW", "DIFFICULT_TO_GROW"],
+        default: "EASY_TO_GROW",
         trim: true,
       },
     },

@@ -11,6 +11,8 @@ exports.fetchCart = async (req, res, next) => {
       return next({ status: 404, message: "Cart does not exists" });
     }
 
+    // populate reference details
+
     cart = await cart.populate([
       { path: "user", select: "-__v" },
       { path: "items.plant", select: "-__v" },
@@ -29,6 +31,7 @@ exports.fetchCart = async (req, res, next) => {
 };
 
 exports.createCart = async (req, res, next) => {
+  // collect and  return api field level validations
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next({
@@ -45,6 +48,7 @@ exports.createCart = async (req, res, next) => {
       user: userId,
     });
 
+    // create cart if not available otherwise update cart 
     if (cart) {
       cart.items = items;
       await cart.save();
@@ -75,6 +79,8 @@ exports.createCart = async (req, res, next) => {
 };
 
 exports.updateCart = async (req, res, next) => {
+  // collect and  return api field level validations
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next({

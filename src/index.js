@@ -10,7 +10,7 @@ const app = express();
 
 const http = require("http").createServer(app);
 
-// routes
+// import all routes
 const authRoutes = require("./routes/auth.route");
 const collectionRoutes = require("./routes/collection.route");
 const plantRoutes = require("./routes/plant.route");
@@ -19,7 +19,10 @@ const orderRoutes = require("./routes/order.route");
 
 // middlewares
 
+// parse incomming request into json
 app.use(express.json());
+
+// allow cors for frontend to access api routes
 app.use(
   cors({
     credentials: true,
@@ -27,9 +30,11 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
+
+// parse incomming cookies in request 
 app.use(cookieParser());
 
-// log in development environment
+// logging in development environment
 
 if (process.env.NODE_ENV === "developement") {
   const morgan = require("morgan");

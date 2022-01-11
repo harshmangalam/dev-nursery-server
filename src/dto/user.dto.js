@@ -1,7 +1,10 @@
 module.exports = (user) => {
   return {
-    ...user._doc,
-    __v: undefined,
-    password: undefined,
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 };

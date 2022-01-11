@@ -23,10 +23,6 @@ const collectionSchema = new Schema(
       type: String,
       trim: true,
     },
-    totalPlants: {
-      type: Number,
-      min: 0,
-    },
   },
   { timestamps: true }
 );
