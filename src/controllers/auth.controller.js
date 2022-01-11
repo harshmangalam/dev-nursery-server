@@ -7,6 +7,7 @@ const userDTO = require("../dto/user.dto");
 // ------------------------- login ------------------------------
 
 exports.login = async (req, res, next) => {
+  // return api fields validation errors 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next({
@@ -57,6 +58,7 @@ exports.login = async (req, res, next) => {
 // --------------------- signup ---------------------------------
 
 exports.signup = async (req, res, next) => {
+  // return api fields level error validations 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next({
@@ -106,6 +108,7 @@ exports.signup = async (req, res, next) => {
 
 exports.fetchCurrentUser = async (req, res, next) => {
   try {
+    // get data already store in response local objects 
     const currentUser = res.locals.user;
     return res.status(200).json({
       type: "success",
