@@ -1,6 +1,8 @@
 const User = require("../models/user.model");
+const Order = require("../models/order.model");
 const { checkPassword, hashPassword } = require("../utils/password.util");
 const userDTO = require("../dto/user.dto");
+const orderDTO = require("../dto/order.dto");
 
 exports.fetchUsers = async (req, res, next) => {
   try {
@@ -125,6 +127,31 @@ exports.changeUserRole = async (req, res, next) => {
       message: "User role changed",
       data: {
         user: userDTO(user),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.fetchUserOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find({ user: res.locals.user._id }).populate([
+      { path: "user", select: "name email" },
+      { path: "items.plant", select: "name slug price images" },
+    ]);
+    const ordersData = [];
+
+    orders.forEach((order) => {
+      const transformOrder = orderDTO(order);
+      ordersData.push(transformOrder);
+    });
+
+    return res.status(200).json({
+      type: "success",
+      message: "Fetc user lists",
+      data: {
+        orders: ordersData,
       },
     });
   } catch (error) {

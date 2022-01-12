@@ -11,6 +11,7 @@ const {
   changePassword,
   updateProfile,
   changeUserRole,
+  fetchUserOrders
 } = require("../controllers/user.controller");
 
 router.get("/users", fetchUsers);
@@ -19,4 +20,5 @@ router.get("/me", checkAuth, fetchCurrentUser);
 router.put("/change-password", checkAuth, changePassword);
 router.put("/update-profile", checkAuth, updateProfile);
 router.get("/:userId/change-role", checkAuth, checkAdmin, changeUserRole);
+router.get("/orders", checkAuth, fetchUserOrders);
 module.exports = router;
