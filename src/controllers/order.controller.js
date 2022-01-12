@@ -5,8 +5,8 @@ const { validationResult } = require("express-validator");
 exports.fetchOrders = async (req, res, next) => {
   try {
     const orders = await Order.find().populate([
-      { path: "user" },
-      { path: "items.plant" },
+      { path: "user", select: "name email" },
+      { path: "items.plant", select: "name slug price images" },
     ]);
 
     const orderData = [];
@@ -18,7 +18,7 @@ exports.fetchOrders = async (req, res, next) => {
 
     return res.status(200).json({
       type: "success",
-      message: "Fetch orders",
+      message: "Fetch order lists",
       data: {
         orders: orderData,
       },
@@ -130,13 +130,11 @@ exports.updateOrder = async (req, res, next) => {
     order.paymentDone = paymentDone;
     order = await order.save();
 
-    order = await order.populate([{ path: "user" }, { path: "items.plant" }]);
-
     return res.status(201).json({
       type: "success",
       message: "Order updated successfully",
       data: {
-        order: orderDTO(order),
+        orderId: order._id,
       },
     });
   } catch (error) {
