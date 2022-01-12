@@ -2,20 +2,62 @@
 
 DEV Community and MongoDB hackathon project
 
+## Tech Stack
+
+- NodeJs
+- ExpressJs
+- Mongodb
+- Mongoose
+
 ## Features
 
 ### Authentication
 
-- login using email and password.
-- jwt and cookies based authentication.
-- roles based authentication for customer and admin.
-- signup using email.
+- Login using email and password.
+- JWT and cookies based authentication.
+- Roles based authentication for customer and admin.
+- Signup
+- Login
 
-### Collections
+### Users
 
-- fetch paginated collections.
-- fetch single collection by id.
-- create new collection.
-- validation using collection creation.
-- update collection.
-- delete collection.
+- Fetch user lists
+- Fetch user details
+- Fetch current user detail
+- Change password
+- Update profile
+- Change user role
+- Fetch user order lists
+
+### Collection
+
+- Fetch collection lists
+- Fetch collection details
+- Create new collection
+- Update collection
+- Delete Collection
+
+### Plant
+
+- Fetch plant lists
+- Fetch plant details
+- Create new plant
+- Update plant
+- Delete plant
+- Add Review and Rating on plant
+- Remove Review and Rating from plant
+- Fetch plant review lists
+
+### Order
+
+- Fetch order lists
+- Fetch order details
+- Place new order
+- Update order
+
+### Cart
+
+- Create new cart
+- Fetch cart details
+- Update cart
+- Remove cart
