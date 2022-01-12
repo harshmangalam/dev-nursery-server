@@ -12,6 +12,7 @@ const http = require("http").createServer(app);
 
 // import all routes
 const authRoutes = require("./routes/auth.route");
+const userRoutes = require("./routes/user.route");
 const collectionRoutes = require("./routes/collection.route");
 const plantRoutes = require("./routes/plant.route");
 const cartRoutes = require("./routes/cart.route");
@@ -31,7 +32,7 @@ app.use(
   })
 );
 
-// parse incomming cookies in request 
+// parse incomming cookies in request
 app.use(cookieParser());
 
 // logging in development environment
@@ -53,6 +54,7 @@ app.get("/", (req, res) => {
 
 // routes middleware
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/collections", collectionRoutes);
 app.use("/api/plants", plantRoutes);
 app.use("/api/cart", cartRoutes);
