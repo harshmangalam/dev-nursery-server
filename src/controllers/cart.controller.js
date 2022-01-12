@@ -14,8 +14,8 @@ exports.fetchCart = async (req, res, next) => {
     // populate reference details
 
     cart = await cart.populate([
-      { path: "user", select: "-__v" },
-      { path: "items.plant", select: "-__v" },
+      { path: "user", select: "name email" },
+      { path: "items.plant", select: "name slug price  images" },
     ]);
 
     return res.status(200).json({
@@ -42,35 +42,32 @@ exports.createCart = async (req, res, next) => {
   }
 
   const userId = res.locals.user._id;
-  const { items } = req.body;
+  const { items, totalPrice } = req.body;
   try {
     let cart = await Cart.findOne({
       user: userId,
     });
 
-    // create cart if not available otherwise update cart 
+    // create cart if not available otherwise update cart
     if (cart) {
       cart.items = items;
+      cart.totalPrice = totalPrice;
       await cart.save();
     } else {
       cart = new Cart({
         user: userId,
+        totalPrice,
         items,
       });
 
       await cart.save();
     }
 
-    let cartData = await cart.populate([
-      { path: "user", select: "-__v" },
-      { path: "items.plant", select: "-__v" },
-    ]);
-
     return res.status(201).json({
       type: "success",
       message: "Cart created successfully",
       data: {
-        cart: cartDTO(cartData),
+        cartId: cart._id,
       },
     });
   } catch (error) {
@@ -89,25 +86,21 @@ exports.updateCart = async (req, res, next) => {
       data: errors.mapped(),
     });
   }
-  const { items } = req.body;
+  const { items, totalPrice } = req.body;
   try {
-    let cart = await Cart.findById(req.params.cartId);
+    let cart = await Cart.findOne({ user: res.locals.user._id });
     if (!cart) {
       return next({ status: 404, message: "Cart does not exists" });
     }
     cart.items = items;
-    cart  = await cart.save();
-
-    cart = await cart.populate([
-      { path: "user", select: "-__v" },
-      { path: "items.plant", select: "-__v" },
-    ]);
+    cart.totalPrice = totalPrice;
+    cart = await cart.save();
 
     return res.status(201).json({
       type: "success",
       message: "Cart updated successfully",
       data: {
-        cart: cartDTO(cart),
+        cartId: cart._id,
       },
     });
   } catch (error) {
@@ -117,7 +110,7 @@ exports.updateCart = async (req, res, next) => {
 
 exports.deleteCart = async (req, res, next) => {
   try {
-    const cart = await Cart.findById(req.params.cartId);
+    const cart = await Cart.findOne({user:res.locals.user._id});
     if (!cart) {
       return next({ status: 404, message: "Cart does  not exists" });
     }

@@ -14,11 +14,15 @@ const cartValidation = [
     .not()
     .isEmpty()
     .withMessage("Cart items must be required with quantity and plant id"),
+  body("totalPrice")
+    .not()
+    .isEmpty()
+    .withMessage("Cart total price must be required"),
 ];
 
 router.get("/", checkAuth, fetchCart);
 router.post("/", cartValidation, checkAuth, createCart);
-router.put("/:cartId", cartValidation, checkAuth, updateCart);
-router.delete("/:cartId", checkAuth, deleteCart);
+router.put("/", cartValidation, checkAuth, updateCart);
+router.delete("/", checkAuth, deleteCart);
 
 module.exports = router;

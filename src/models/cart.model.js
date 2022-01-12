@@ -10,7 +10,7 @@ const cartSchema = new Schema(
       {
         quantity: {
           type: Number,
-          min: [1,"Items quantity must be greater than equal to 1"],
+          min: [1, "Items quantity must be greater than equal to 1"],
           default: 1,
         },
         plant: {
@@ -19,6 +19,10 @@ const cartSchema = new Schema(
         },
       },
     ],
+    totalPrice: {
+      type: Number,
+      min: 0,
+    },
   },
   { timestamps: true }
 );
