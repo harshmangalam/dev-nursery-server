@@ -69,5 +69,5 @@ DEV Community and MongoDB hackathon project
 | Server        | URL                           | Description              |
 | :------------ | :---------------------------- | :----------------------- |
 | `DEV Server`  | http://localhost:4000         | Development srver        |
-| `PROD Server` | http://dev-nursery.heroku.app | Heroku production server |
+| `PROD Server` | https://dev-nursery.herokuapp.com/ | Heroku production server |
 
