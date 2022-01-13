@@ -6,8 +6,9 @@ const cookieParser = require("cookie-parser");
 const { createAdmin } = require("./seeds/user.seed");
 require("dotenv").config();
 
+const swaggerUI = require("swagger-ui-express");
+const specs = require("./docs");
 const app = express();
-
 const http = require("http").createServer(app);
 
 // import all routes
@@ -41,6 +42,10 @@ if (process.env.NODE_ENV === "developement") {
   const morgan = require("morgan");
   app.use(morgan("dev"));
 }
+
+// api docs using swagger
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // server health check
 
