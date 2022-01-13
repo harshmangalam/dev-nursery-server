@@ -61,3 +61,13 @@ DEV Community and MongoDB hackathon project
 - Fetch cart details
 - Update cart
 - Remove cart
+
+---
+
+## API
+
+| Server        | URL                           | Description              |
+| :------------ | :---------------------------- | :----------------------- |
+| `DEV Server`  | http://localhost:4000         | Development srver        |
+| `PROD Server` | http://dev-nursery.heroku.app | Heroku production server |
+

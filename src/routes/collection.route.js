@@ -10,7 +10,7 @@ const {
   fetchCollections,
   updateCollection,
   deleteCollection,
-  fetchCollection
+  fetchCollection,
 } = require("../controllers/collection.controller");
 
 const collectionValidation = [
@@ -20,6 +20,7 @@ const collectionValidation = [
     .isEmpty()
     .withMessage("Collection image must be required"),
 ];
+
 router.get("/", fetchCollections);
 router.get("/:collectionId", fetchCollection);
 router.post("/", checkAuth, checkAdmin, collectionValidation, createCollection);
